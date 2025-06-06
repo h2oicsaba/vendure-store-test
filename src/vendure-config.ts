@@ -13,7 +13,7 @@ import 'dotenv/config';
 import path from 'path';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
-const serverPort = +process.env.PORT || 3000;
+const serverPort = process.env.PORT ? +process.env.PORT : 3000;
 
 export const config: VendureConfig = {
     apiOptions: {
@@ -35,7 +35,7 @@ export const config: VendureConfig = {
             password: process.env.SUPERADMIN_PASSWORD,
         },
         cookieOptions: {
-          secret: process.env.COOKIE_SECRET,
+            secret: process.env.COOKIE_SECRET,
         },
     },
     dbConnectionOptions: {
