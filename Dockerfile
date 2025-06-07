@@ -57,4 +57,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD ["/bin/sh", "/healthcheck.sh"]
 
 # Run the application directly in production mode
-CMD ["node", "--no-warnings", "dist/index.js"]
+CMD ["yarn", "railway"]
