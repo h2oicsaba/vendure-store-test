@@ -20,17 +20,22 @@ export const config: VendureConfig = {
         port: serverPort,
         adminApiPath: 'admin-api',
         shopApiPath: 'shop-api',
-        // Add health check endpoint
-        adminApiPlayground: true,
+        // Development settings
+        adminApiPlayground: IS_DEV,
         adminApiDebug: IS_DEV,
-        shopApiPlayground: true,
+        shopApiPlayground: IS_DEV,
         shopApiDebug: IS_DEV,
-        // Health check endpoint
+        // Health check endpoint for both dev and prod
         middleware: [
             {
                 route: 'health',
-                handler: (req: any, res: any) => {
-                    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+                handler: (req: import('express').Request, res: import('express').Response) => {
+                    res.json({ 
+                        status: 'ok', 
+                        timestamp: new Date().toISOString(),
+                        environment: process.env.NODE_ENV || 'development',
+                        nodeVersion: process.version
+                    });
                 },
             },
         ],

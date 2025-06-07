@@ -1,6 +1,10 @@
 # Build stage
 FROM node:20-alpine AS builder
 
+# Set build arguments
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
 WORKDIR /usr/src/app
 
 # Install dependencies first for better layer caching
@@ -22,8 +26,16 @@ RUN apk --no-cache add curl
 # Copy package files
 COPY package.json yarn.lock ./
 
-# Install production dependencies only
-RUN yarn install --production --frozen-lockfile
+# Install dependencies based on the environment
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+# Install dependencies based on environment
+RUN if [ "$NODE_ENV" = "production" ]; then \
+      yarn install --production --frozen-lockfile; \
+    else \
+      yarn install --frozen-lockfile; \
+    fi
 
 # Copy built files from builder
 COPY --from=builder /usr/src/app/dist ./dist
@@ -41,14 +53,13 @@ echo "Health check passed"\nexit 0' > /healthcheck.sh && \
     chmod +x /healthcheck.sh
 
 # Set environment variables
-ENV NODE_ENV=production \
-    PORT=3000
+ENV PORT=3000
 
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Health check
+# Health check (only in production)
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD ["/bin/sh", "/healthcheck.sh"]
 
-# Run the application
-CMD ["node", "dist/index.js"]
+# Run the application using the start script from package.json
+CMD ["yarn", "start"]

@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/dist
+    environment:
+      - NODE_ENV=development
+      - APP_ENV=dev
+      - PORT=3000
+      # Add other environment variables as needed
+    command: sh -c "yarn install && yarn build && yarn dev"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
