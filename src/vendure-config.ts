@@ -12,6 +12,7 @@ import { GraphiqlPlugin } from '@vendure/graphiql-plugin';
 import 'dotenv/config';
 import path from 'path';
 
+
 const IS_DEV = process.env.APP_ENV === 'dev';
 // Set the port from environment variable or default to 3000
 const serverPort = process.env.API_PORT ? parseInt(process.env.API_PORT, 10) : 3000;
@@ -28,15 +29,15 @@ export const config: VendureConfig = {
         shopApiDebug: IS_DEV,
         cors: true,
         middleware: [
-        // Health check endpoint and Express configuration for both dev and prod
             {
-                route: '',
-                handler: (req: import('express').Request, res: import('express').Response, next: import('express').NextFunction) => {
-                    // Trust proxy headers for Railway deployment
-                    const app = req.app;
-                    app.set('trust proxy', true);
+                handler: (req: any, res: any, next: any) => {
+                    // Set trust proxy for express-rate-limit
+                    if (req.app && typeof req.app.set === 'function') {
+                        req.app.set('trust proxy', true);
+                    }
                     next();
                 },
+                route: '',
             },
             {
                 route: 'health',
