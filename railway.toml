@@ -7,18 +7,31 @@
   nodeVersion = "20"
 
 [deploy]
-  startCommand = "node dist/index.js"
+  startCommand = "yarn start"
   healthcheckPath = "/health"
-  healthcheckTimeout = 30
-  restartDelay = 5
-  healthcheckInterval = 15
-  healthcheckStartPeriod = 30
+  healthcheckTimeout = 60
+  restartDelay = 10
+  healthcheckInterval = 30
+  healthcheckStartPeriod = 60
+  healthcheckSuccessThreshold = 1
+  healthcheckFailureThreshold = 5
 
 [build.environment]
   NODE_ENV = "production"
   NODE_OPTIONS = "--max_old_space_size=1024"
   PORT = "3000"
   NODE_PORT = "3000"
+  # Database configuration should be set in Railway environment variables
+  # - DATABASE_URL
+  # - DB_HOST
+  # - DB_PORT
+  # - DB_NAME
+  # - DB_USERNAME
+  # - DB_PASSWORD
+  # - SESSION_SECRET
+  # - COOKIE_SECRET
+  # - SUPERADMIN_USERNAME
+  # - SUPERADMIN_PASSWORD
 
 [deploy.regions]
   primary = "europe-west1"
