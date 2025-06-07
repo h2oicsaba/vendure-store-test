@@ -41,9 +41,10 @@ RUN if [ "$NODE_ENV" = "production" ]; then \
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/static ./static
 
-# Create a simple healthcheck script that always passes
+# Create a healthcheck script that actually checks the /health endpoint
 RUN echo '#!/bin/sh\n\
-echo "Health check passed"\nexit 0' > /healthcheck.sh && \
+curl -f http://localhost:3000/health || exit 1\n\
+exit 0' > /healthcheck.sh && \
     chmod +x /healthcheck.sh
 
 # Set environment variables
