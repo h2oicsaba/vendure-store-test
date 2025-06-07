@@ -13,7 +13,8 @@ import 'dotenv/config';
 import path from 'path';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
-const serverPort = process.env.PORT ? +process.env.PORT : 3000;
+// Set the port from environment variable or default to 3000
+const serverPort = process.env.API_PORT ? parseInt(process.env.API_PORT, 10) : 3000;
 
 export const config: VendureConfig = {
     apiOptions: {
@@ -30,8 +31,8 @@ export const config: VendureConfig = {
             {
                 route: 'health',
                 handler: (req: import('express').Request, res: import('express').Response) => {
-                    res.json({ 
-                        status: 'ok', 
+                    res.json({
+                        status: 'ok',
                         timestamp: new Date().toISOString(),
                         environment: process.env.NODE_ENV || 'development',
                         nodeVersion: process.version

@@ -39,9 +39,8 @@
 
 [deploy.environment]
   NODE_ENV = "production"
-  PORT = "3000"
-  NODE_PORT = "3000"
   API_PORT = "3000"
+  NODE_PORT = "${API_PORT}"
   # Make sure to set these in your Railway environment variables:
   # - DATABASE_URL
   # - SESSION_SECRET
