@@ -26,8 +26,18 @@ export const config: VendureConfig = {
         adminApiDebug: IS_DEV,
         shopApiPlayground: IS_DEV,
         shopApiDebug: IS_DEV,
-        // Health check endpoint for both dev and prod
+        cors: true,
         middleware: [
+        // Health check endpoint and Express configuration for both dev and prod
+            {
+                route: '',
+                handler: (req: import('express').Request, res: import('express').Response, next: import('express').NextFunction) => {
+                    // Trust proxy headers for Railway deployment
+                    const app = req.app;
+                    app.set('trust proxy', true);
+                    next();
+                },
+            },
             {
                 route: 'health',
                 handler: (req: import('express').Request, res: import('express').Response) => {
