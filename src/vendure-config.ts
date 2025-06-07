@@ -20,13 +20,20 @@ export const config: VendureConfig = {
         port: serverPort,
         adminApiPath: 'admin-api',
         shopApiPath: 'shop-api',
-        // The following options are useful in development mode,
-        // but are best turned off for production for security
-        // reasons.
-        ...(IS_DEV ? {
-            adminApiDebug: true,
-            shopApiDebug: true,
-        } : {}),
+        // Add health check endpoint
+        adminApiPlayground: true,
+        adminApiDebug: IS_DEV,
+        shopApiPlayground: true,
+        shopApiDebug: IS_DEV,
+        // Health check endpoint
+        middleware: [
+            {
+                route: 'health',
+                handler: (req: any, res: any) => {
+                    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+                },
+            },
+        ],
     },
     authOptions: {
         tokenMethod: ['bearer', 'cookie'],

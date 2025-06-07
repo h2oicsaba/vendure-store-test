@@ -1,0 +1,7 @@
+        // The following options are useful in development mode,
+        // but are best turned off for production for security
+        // reasons.
+        ...(IS_DEV ? {
+            adminApiDebug: true,
+            shopApiDebug: true,
+        } : {}),

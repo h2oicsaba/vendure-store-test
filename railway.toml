@@ -1,21 +1,37 @@
 [build]
   builder = "nixpacks"
   buildCommand = "yarn build"
-  startCommand = "yarn start"
+  startCommand = "node dist/index.js"
   installCommand = "yarn install --frozen-lockfile"
   nixpacks = { version = "node20" }
   nodeVersion = "20"
 
 [deploy]
-  startCommand = "yarn start"
+  startCommand = "node dist/index.js"
   healthcheckPath = "/health"
-  healthcheckTimeout = 100
+  healthcheckTimeout = 30
   restartDelay = 5
+  healthcheckInterval = 15
+  healthcheckStartPeriod = 30
 
 [build.environment]
   NODE_ENV = "production"
   NODE_OPTIONS = "--max_old_space_size=1024"
+  PORT = "3000"
+  NODE_PORT = "3000"
 
 [deploy.regions]
   primary = "europe-west1"
   fallback = "us-east1"
+
+[deploy.environment]
+  NODE_ENV = "production"
+  PORT = "3000"
+  NODE_PORT = "3000"
+  API_PORT = "3000"
+  # Make sure to set these in your Railway environment variables:
+  # - DATABASE_URL
+  # - SESSION_SECRET
+  # - SUPERADMIN_USERNAME
+  # - SUPERADMIN_PASSWORD
+  # - COOKIE_SECRET
