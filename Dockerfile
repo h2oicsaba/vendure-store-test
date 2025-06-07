@@ -59,5 +59,5 @@ EXPOSE 3000
 # Health check (only in production)
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD ["/bin/sh", "/healthcheck.sh"]
 
-# Run the application using the start script from package.json
-CMD ["yarn", "start"]
+# Run the application directly
+CMD ["node", "dist/index.js"]
