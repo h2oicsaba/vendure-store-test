@@ -4,6 +4,7 @@
   startCommand = "yarn start"
   installCommand = "yarn install --frozen-lockfile"
   nixpacks = { version = "node20" }
+  nodeVersion = "20"
 
 [deploy]
   startCommand = "yarn start"
