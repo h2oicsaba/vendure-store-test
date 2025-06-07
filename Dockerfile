@@ -41,9 +41,6 @@ RUN if [ "$NODE_ENV" = "production" ]; then \
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/static ./static
 
-# Copy .env file if it exists
-COPY .env* ./
-
 # Create a simple healthcheck script that always passes
 RUN echo '#!/bin/sh\n\
 echo "Health check passed"\nexit 0' > /healthcheck.sh && \
@@ -59,5 +56,5 @@ EXPOSE 3000
 # Health check (only in production)
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD ["/bin/sh", "/healthcheck.sh"]
 
-# Run the application directly
-CMD ["node", "dist/index.js"]
+# Run the application directly in production mode
+CMD ["node", "--no-warnings", "dist/index.js"]
