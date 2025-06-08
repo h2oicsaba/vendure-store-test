@@ -9,11 +9,11 @@
     "dev:server": "ts-node ./src/index.ts",
     "dev:worker": "ts-node ./src/index-worker.ts",
     "dev": "concurrently npm:dev:*",
-    "build": "tsc",
+    "build": "tsc && cp src/patch-express-rate-limit.js dist/",
     "start:server": "node ./dist/index.js",
     "start:worker": "node ./dist/index-worker.js",
     "start": "node ./dist/index.js",
-    "railway": "node --no-warnings ./dist/index.js"
+    "railway": "node --no-warnings --require ./dist/patch-express-rate-limit.js ./dist/index.js"
   },
   "dependencies": {
     "@vendure/admin-ui-plugin": "3.3.1",
