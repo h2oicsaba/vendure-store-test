@@ -41,8 +41,21 @@ RUN if [ "$NODE_ENV" = "production" ]; then \
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/static ./static
 
-# Copy static files to initial-static for volume initialization
-COPY --from=builder /usr/src/app/static ./initial-static
+# Create initial-static directory and copy static files
+RUN mkdir -p /usr/src/app/initial-static
+COPY --from=builder /usr/src/app/static/* /usr/src/app/initial-static/
+
+# Copy email templates to initial-static
+RUN mkdir -p /usr/src/app/initial-static/email/templates/partials
+
+# Copy email templates (handle case where files might not exist)
+RUN { \
+  if [ -d "/usr/src/app/node_modules/@vendure/email-plugin/templates" ]; then \
+    cp -r /usr/src/app/node_modules/@vendure/email-plugin/templates/. /usr/src/app/initial-static/email/templates/ || echo "No default email templates found"; \
+  else \
+    echo "Email templates directory not found"; \
+  fi \
+}
 
 # Copy initialization script
 COPY init-volume.sh ./init-volume.sh
