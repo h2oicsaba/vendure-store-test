@@ -41,8 +41,8 @@
   NODE_ENV = "production"
   PORT = "3000"
   API_PORT = "${PORT}"
-  TRUST_PROXY = "true"
   EXPRESS_DISABLE_RATE_LIMIT = "true"
+  EXPRESS_RATE_LIMIT_TRUST_PROXY = "true"
   # Make sure to set these in your Railway environment variables:
   # - DATABASE_URL
   # - SESSION_SECRET
