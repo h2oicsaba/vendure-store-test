@@ -9,6 +9,7 @@ import { defaultEmailHandlers, EmailPlugin, FileBasedTemplateLoader } from '@ven
 import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
 import { GraphiqlPlugin } from '@vendure/graphiql-plugin';
+import { disableRateLimitMiddleware } from './disable-rate-limit-middleware';
 import 'dotenv/config';
 import path from 'path';
 
@@ -31,12 +32,7 @@ export const config: VendureConfig = {
         // Health check endpoint and Express configuration for both dev and prod
             {
                 route: '',
-                handler: (req: import('express').Request, res: import('express').Response, next: import('express').NextFunction) => {
-                    // Trust proxy headers for Railway deployment
-                    const app = req.app;
-                    app.set('trust proxy', 1); // Trust one layer of proxy (e.g., Railway's Metal Edge)
-                    next();
-                },
+                handler: disableRateLimitMiddleware,
             },
             {
                 route: 'health',
