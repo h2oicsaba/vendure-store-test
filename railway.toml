@@ -1,6 +1,6 @@
 [build]
   builder = "nixpacks"
-  buildCommand = "yarn build"
+  buildCommand = "rm -rf dist node_modules && yarn install --frozen-lockfile && yarn build"
   startCommand = "node dist/index.js"
   installCommand = "yarn install --frozen-lockfile"
   nixpacks = { version = "node20" }
