@@ -99,7 +99,10 @@ export const config: VendureConfig = {
             outputPath: path.join(__dirname, '../static/email/test-emails'),
             route: 'mailbox',
             handlers: defaultEmailHandlers,
-            templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
+            // Use the default template loader which uses the templates embedded in the plugin
+            // instead of loading from the filesystem
+            // This avoids issues with the volume mount
+            // templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../static/email/templates')),
             globalTemplateVars: {
                 // The following variables will change depending on your storefront implementation.
                 // Here we are assuming a storefront running at http://localhost:8080.
