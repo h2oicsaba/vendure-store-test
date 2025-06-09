@@ -7,14 +7,14 @@
   nodeVersion = "20"
 
 [deploy]
-  startCommand = "yarn railway"
+  startCommand = "node dist/index.js"
   healthcheckPath = "/health"
-  healthcheckTimeout = 60
-  restartDelay = 10
-  healthcheckInterval = 30
-  healthcheckStartPeriod = 60
+  healthcheckTimeout = 10
+  restartDelay = 5
+  healthcheckInterval = 15
+  healthcheckStartPeriod = 30
   healthcheckSuccessThreshold = 1
-  healthcheckFailureThreshold = 5
+  healthcheckFailureThreshold = 3
 
 [build.environment]
   NODE_ENV = "production"

@@ -48,9 +48,11 @@ COPY --from=builder /usr/src/app/static ./initial-static
 COPY init-volume.sh ./init-volume.sh
 RUN chmod +x ./init-volume.sh
 
-# Create a healthcheck script that actually checks the /health endpoint
+# Create a healthcheck script that checks the /health endpoint
 RUN echo '#!/bin/sh\n\
-curl -f http://localhost:3000/health || exit 1\n\
+# Use the PORT environment variable or default to 3000\
+PORT=${PORT:-3000}\
+curl -f http://localhost:$PORT/health || exit 1\n\
 exit 0' > /healthcheck.sh && \
     chmod +x /healthcheck.sh
 
@@ -67,4 +69,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD ["/bin/sh", "/healthcheck.sh"]
 
 # Run the initialization script before starting the application
-CMD ["/bin/sh", "-c", "./init-volume.sh && yarn railway"]
+CMD ["/bin/sh", "-c", "./init-volume.sh && node dist/index.js"]
