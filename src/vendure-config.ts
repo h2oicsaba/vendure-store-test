@@ -17,9 +17,35 @@ const IS_DEV = process.env.APP_ENV === 'dev';
 // Set the port from environment variable or default to 3000
 const serverPort = process.env.API_PORT ? parseInt(process.env.API_PORT, 10) : 3000;
 
+// Express app konfiguráció a fő alkalmazáshoz
+const expressOptions = {
+    app: () => {
+        const express = require('express');
+        const app = express();
+        // Közvetlenül és explicit módon beállítjuk a trust proxy-t
+        app.set('trust proxy', 2);
+
+        // Gondoskodjunk arról, hogy ne legyen felülírtás
+        const originalSet = app.set;
+        app.set = function (setting: string, val: any) {
+            if (setting === 'trust proxy' && val !== 2) {
+                console.log(`Attempt to change 'trust proxy' from 2 to '${val}' prevented`);
+                return app;
+            }
+            return originalSet.apply(this, arguments as any);
+        };
+
+        return app;
+    },
+};
+
 export const config: VendureConfig = {
     apiOptions: {
         port: serverPort,
+        cors: {
+            origin: true, // Engedélyezzük minden origin-t CORs-hez
+            credentials: true
+        },
         adminApiPath: 'admin-api',
         shopApiPath: 'shop-api',
         // Development settings
@@ -27,9 +53,8 @@ export const config: VendureConfig = {
         adminApiDebug: IS_DEV,
         shopApiPlayground: IS_DEV,
         shopApiDebug: IS_DEV,
-        cors: true,
         middleware: [
-        // Health check endpoint and Express configuration for both dev and prod
+            // Health check endpoint and Express configuration for both dev and prod
             {
                 route: '',
                 handler: disableRateLimitMiddleware,
@@ -123,8 +148,8 @@ export const config: VendureConfig = {
             route: 'admin',
             port: serverPort, // Használjuk ugyanazt a portot, ne +2-t
             adminUiConfig: {
-                apiPort: serverPort,
-                apiHost: 'localhost', // Biztosítsuk, hogy a localhost-ot használja
+                apiPort: undefined, // Ne állítsunk be portot
+                apiHost: undefined // Ne állítsunk be host-ot, hogy relatív URL-ként működjön
             },
         }),
     ],

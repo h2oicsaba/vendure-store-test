@@ -1,3 +1,12 @@
+// Direkt patch betöltése az express-rate-limit library javításához
+console.log('Attempting to load express-rate-limit patch');
+try {
+    require('./patch-express-rate-limit');
+    console.log('Express-rate-limit patch loaded successfully');
+} catch (e) {
+    console.error('Error loading express-rate-limit patch:', e);
+}
+
 import { bootstrap, runMigrations } from '@vendure/core';
 import { config } from './vendure-config';
 import express from 'express';
