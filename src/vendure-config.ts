@@ -34,7 +34,7 @@ export const config: VendureConfig = {
                 handler: (req: import('express').Request, res: import('express').Response, next: import('express').NextFunction) => {
                     // Trust proxy headers for Railway deployment
                     const app = req.app;
-                    app.set('trust proxy', true);
+                    app.set('trust proxy', 1); // Trust one layer of proxy (e.g., Railway's Metal Edge)
                     next();
                 },
             },
