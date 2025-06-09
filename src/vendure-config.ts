@@ -33,7 +33,7 @@ export const config: VendureConfig = {
                 handler: (req: any, res: any, next: any) => {
                     // Set trust proxy for express-rate-limit
                     if (req.app && typeof req.app.set === 'function') {
-                        req.app.set('trust proxy', 1);
+                        req.app.set('trust proxy', 2);
                     }
                     next();
                 },
