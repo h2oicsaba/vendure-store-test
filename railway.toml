@@ -34,8 +34,8 @@
   # - SUPERADMIN_PASSWORD
 
 # Volume configuration for persistent storage of static assets
-[volume]
-  mountPath = "/usr/src/app/static"
+[[volume]]
+  mount_path = "/usr/src/app/static"
   name = "vendure-static"
 
 [deploy.regions]
