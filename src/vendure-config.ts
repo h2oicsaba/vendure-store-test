@@ -35,6 +35,20 @@ export const config: VendureConfig = {
                 handler: disableRateLimitMiddleware,
             },
             {
+                route: 'ip-debug',
+                handler: (req: import('express').Request, res: import('express').Response) => {
+                    res.json({
+                        ip: req.ip,
+                        ips: req.ips,
+                        headers: req.headers,
+                        appSettings: req.app.settings,
+                        trustProxy: req.app.get('trust proxy'),
+                        timestamp: new Date().toISOString(),
+                        hostname: req.hostname
+                    });
+                },
+            },
+            {
                 route: 'health',
                 handler: (req: import('express').Request, res: import('express').Response) => {
                     res.json({
@@ -107,9 +121,10 @@ export const config: VendureConfig = {
         }),
         AdminUiPlugin.init({
             route: 'admin',
-            port: serverPort + 2,
+            port: serverPort, // Használjuk ugyanazt a portot, ne +2-t
             adminUiConfig: {
                 apiPort: serverPort,
+                apiHost: 'localhost', // Biztosítsuk, hogy a localhost-ot használja
             },
         }),
     ],
