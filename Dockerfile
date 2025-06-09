@@ -41,6 +41,13 @@ RUN if [ "$NODE_ENV" = "production" ]; then \
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/static ./static
 
+# Copy static files to initial-static for volume initialization
+COPY --from=builder /usr/src/app/static ./initial-static
+
+# Copy initialization script
+COPY init-volume.sh ./init-volume.sh
+RUN chmod +x ./init-volume.sh
+
 # Create a healthcheck script that actually checks the /health endpoint
 RUN echo '#!/bin/sh\n\
 curl -f http://localhost:3000/health || exit 1\n\
@@ -49,6 +56,8 @@ exit 0' > /healthcheck.sh && \
 
 # Set environment variables
 ENV API_PORT=3000
+
+# Set PORT environment variable
 ENV PORT=$API_PORT
 
 # Expose the port the app runs on
@@ -57,5 +66,5 @@ EXPOSE 3000
 # Health check (only in production)
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD ["/bin/sh", "/healthcheck.sh"]
 
-# Run the application directly in production mode
-CMD ["yarn", "railway"]
+# Run the initialization script before starting the application
+CMD ["/bin/sh", "-c", "./init-volume.sh && yarn railway"]

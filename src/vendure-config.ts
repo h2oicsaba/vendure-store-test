@@ -87,8 +87,9 @@ export const config: VendureConfig = {
         AssetServerPlugin.init({
             route: 'assets',
             assetUploadDir: path.join(__dirname, '../static/assets'),
-            // Use relative URLs for assets
-            assetUrlPrefix: '/assets/',
+            // Always use relative URLs for assets to avoid hardcoding domains
+            // This works with the volume mount configuration
+            assetUrlPrefix: undefined,
         }),
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
