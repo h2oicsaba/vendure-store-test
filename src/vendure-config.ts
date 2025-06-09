@@ -33,7 +33,7 @@ export const config: VendureConfig = {
                 handler: (req: any, res: any, next: any) => {
                     // Set trust proxy for express-rate-limit
                     if (req.app && typeof req.app.set === 'function') {
-                        req.app.set('trust proxy', true);
+                        req.app.set('trust proxy', 1);
                     }
                     next();
                 },
@@ -112,9 +112,10 @@ export const config: VendureConfig = {
         }),
         AdminUiPlugin.init({
             route: 'admin',
-            port: serverPort + 2,
+            port: serverPort, // Use the same port as the main server
             adminUiConfig: {
-                apiPort: serverPort,
+                apiHost: undefined, // Use relative URLs
+                apiPort: undefined,
             },
 
         }),
