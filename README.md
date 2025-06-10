@@ -146,3 +146,7 @@ You can also run any pending migrations manually, without starting the server vi
 - **Not recommended**: if none of the above helps to resolve the issue, install sharp specifying your machines OS and Architecture. For example: `pnpm install sharp --config.platform=linux --config.architecture=x64` or `npm install sharp --os linux --cpu x64`
 
 # Teszt módosítás az új ágon
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
