@@ -98,6 +98,16 @@ docker-compose up postgres_db
 docker-compose up redis
 ```
 
+The project uses the BullMQ-based JobQueue plugin. Make sure the `bullmq` and `@vendure/job-queue-plugin`
+packages are installed before building the Docker image:
+
+```bash
+npm install @vendure/job-queue-plugin bullmq
+```
+
+Redis connection parameters can be configured with the `REDIS_HOST` and `REDIS_PORT` environment variables
+(see [.env](./.env) for defaults).
+
 ## Plugins
 
 In Vendure, your custom functionality will live in [plugins](https://www.vendure.io/docs/plugins/).

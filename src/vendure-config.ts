@@ -1,10 +1,10 @@
 import {
     dummyPaymentHandler,
-    DefaultJobQueuePlugin,
     DefaultSchedulerPlugin,
     DefaultSearchPlugin,
     VendureConfig,
 } from '@vendure/core';
+import { BullMQJobQueuePlugin } from '@vendure/job-queue-plugin/package/bullmq/plugin';
 import { defaultEmailHandlers, EmailPlugin, FileBasedTemplateLoader } from '@vendure/email-plugin';
 import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
@@ -69,7 +69,12 @@ export const config: VendureConfig = {
             assetUrlPrefix: IS_DEV ? undefined : 'https://www.my-shop.com/assets/',
         }),
         DefaultSchedulerPlugin.init(),
-        DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
+        BullMQJobQueuePlugin.init({
+            connection: {
+                host: process.env.REDIS_HOST || 'localhost',
+                port: +(process.env.REDIS_PORT || 6379),
+            },
+        }),
         DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
         EmailPlugin.init({
             devMode: true,
